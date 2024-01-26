@@ -1,0 +1,151 @@
+body {
+    fill: rgba(207, 129, 51, 0.374);
+}
+
+#container {
+    background-color: rgb(226, 178, 130);
+}
+
+td {
+    padding: 5px !important;
+}
+
+.logo {
+    position: relative;
+    /* display: flex; */
+    padding-left: 2%;
+    /* margin: 25px; */
+    font-family: liquorstore-3d;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 36px;
+    text-transform: uppercase;
+    text-decoration: none;
+    line-height: 1.2em;
+}
+
+.pp {
+    position: relative;
+    width: 35%;
+    vertical-align: middle;
+    ;
+
+}
+
+#pie-xp {
+    font-size: 20px !important;
+}
+
+#pie-subject {
+    font-size: 26px !important;
+    padding-bottom: 20%;
+}
+
+.container {
+    height: min-content;
+    width: max-content;
+    color: antiquewhite;
+}
+
+.moving {
+    left: 35%;
+    justify-content: center;
+}
+
+.box {
+    position: relative;
+    width: 28vw;
+    height: 27vh;
+    border: 2px black solid;
+    background-color: antiquewhite;
+    overflow: auto;
+}
+
+.box-1 {
+    position: absolute;
+    left: 5%;
+    display: grid;
+    justify-content: flex-start;
+}
+
+.box-2 {
+    position: absolute;
+    right: 3%;
+    justify-content: flex-end;
+    padding-left: 2.5%;
+
+}
+
+.box-3 {
+    display: grid;
+    justify-content: center;
+    right: 26%;
+    height: 32vh !important;
+
+}
+
+
+.bar text {
+    fill: black;
+    color: white;
+}
+
+#bar-chart :hover {
+    fill: peru;
+}
+
+#pie-chart {
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+.carousel-caption {
+    font-family: liquorstore-3d;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 26px;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1.2em;
+    color: #333 !important;
+    text-shadow: none !important;
+}
+
+.row {
+    text-align: justify;
+    min-width: 412px;
+    width: 100%;
+    /* it changes by screen size actually */
+    height: 290px;
+    padding-left: 2.5%;
+    justify-content: center;
+}
+
+.row:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+}
+
+.col {
+    display: inline-block;
+    justify-content: space-around !important;
+    width: 30%;
+    padding-left: 10%;
+
+}
+
+.carousel-control.left {
+    background-image: linear-gradient(to right, rgba(0, 0, 0, .01) 0, antiquewhite);
+}
+
+.carousel-control.right {
+    background-image: linear-gradient(to right, rgba(0, 0, 0, .01) 0, antiquewhite);
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 800px) {
+    .column {
+        width: 100%;
+    }
+}
