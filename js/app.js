@@ -163,8 +163,9 @@ function displayDownUpRatio(downUpTransactions) {
   // Display the pie chart
   const dataString = `${downRatio.toFixed(2)};${upRatio.toFixed(2)}`;
   const labelsString = "Down;Up";
+  const colors = getRandomColors(2).join(';');
 
-  document.getElementById("pie").innerHTML = `<pie-chart id="demo" data="${dataString}" gap="0.06" donut="0.2" labels="${labelsString}"></pie-chart>`;
+  document.getElementById("pie").innerHTML = `<pie-chart id="demo" data="${dataString}" gap="0.06" colors="${colors}" donut="0.2" labels="${labelsString}"></pie-chart>`;
 }
 
 function displayXp(data) {
@@ -214,9 +215,10 @@ function displayRadarData(interactions) {
   const scores = topUsers.map(([, count]) => count);
   const ids = labels.map(label => `input_${label}`);
   const max = Math.max(...scores) + 1;
+  const colors = getRandomColors(labels.length).join(';');
 
   // Generate the HTML for the radar chart
-  const radarHTML = `<radar-chart scores="${scores.join(';')}" labels="${labels.join(';')}" ids="${ids.join(';')}" max="${max}"></radar-chart>`;
+  const radarHTML = `<radar-chart scores="${scores.join(';')}" labels="${labels.join(';')}" colors="${colors}" ids="${ids.join(';')}" max="${max}"></radar-chart>`;
 
   // Display the radar chart in the "radar" element
   document.getElementById("radar").innerHTML = radarHTML;

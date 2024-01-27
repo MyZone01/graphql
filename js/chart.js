@@ -61,7 +61,7 @@ class PieChart extends HTMLElement {
     const pathGroup = svg.querySelector('g')
     const maskGroup = svg.querySelector('mask')
     this.paths = this.data.map((_, k) => {
-      const color = colors[k % (colors.length - 1)]
+      const color = colors[k % colors.length]
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
       path.setAttribute('fill', color)
       pathGroup.appendChild(path)
@@ -198,7 +198,7 @@ class BarChart extends HTMLElement {
     this.data = this.getAttribute('data').split(';').map(Number);
     this.chartHeight = Math.max(...this.data);
 
-    const colors = this.getAttribute('colors')?.split(';') || [];
+    const colors = this.getAttribute('colors')?.split(';') ?? ['#FAAA32', '#3EFA7D', '#FA6A25', '#0C94FA', '#FA1F19', '#0CFAE2', '#AB6D23'];
     const labels = this.getAttribute('labels')?.split(';') || [];
 
     const container = document.createElement('div');
@@ -219,10 +219,14 @@ class BarChart extends HTMLElement {
       const labelDiv = document.createElement('div');
       labelDiv.innerText = labels[index] || '';
       labelDiv.style.position = 'absolute';
-      labelDiv.style.bottom = "-50px";
+      labelDiv.style.bottom = "-25px";
       labelDiv.style.left = index * rectWidth + rectWidth / 2 + '%'; // Center the label
       labelDiv.style.transform = 'translateX(-50%)';
       labelDiv.style.opacity = '0';
+      labelDiv.style.maxWidth = '150px';
+      labelDiv.style.overflow = 'hidden';
+      labelDiv.style.textOverflow = 'ellipsis';
+      labelDiv.style.whiteSpace = 'nowrap';
       labelDiv.style.transition = 'opacity 0.3s';
 
       container.appendChild(labelDiv);
@@ -277,7 +281,7 @@ class BarChart extends HTMLElement {
   }
 
   animateBars() {
-    const duration = 1000;
+    const duration = 750;
     const startTime = performance.now();
 
     const animate = (currentTime) => {
@@ -321,6 +325,7 @@ class RadarChart extends HTMLElement {
     const labels = this.getAttribute('labels').split(';');
     const ids = this.getAttribute('ids')?.split(';');
     const max = parseFloat(this.getAttribute('max')) || 1.0;
+    const colors = this.getAttribute('colors')?.split(';') ?? ['#FAAA32', '#3EFA7D', '#FA6A25', '#0C94FA', '#FA1F19', '#0CFAE2', '#AB6D23'];
 
     // Constants
     const width = this.getAttribute('width') ?? 200; // Adjust as needed
@@ -331,18 +336,18 @@ class RadarChart extends HTMLElement {
     const sides = scores.length;
 
     // Create SVG
-    const svg = strToDom(/*html*/`<svg viewBox="0 0 200 200"></svg>`);
-    shadow.appendChild(svg);
+    this.svg = strToDom(/*html*/`<svg viewBox="0 0 200 200"></svg>`);
+    shadow.appendChild(this.svg);
 
     // Generate points of the chart frame
-    const points = [];
+    this.points = [];
     let angle = 360;
     for (let side = 0; side < sides; side++) {
       angle -= 360 / sides;
       const rads = angle * (Math.PI / 180);
       const x = center_x + radius * Math.cos(rads);
       const y = center_y + radius * Math.sin(rads);
-      points.push([x, y]);
+      this.points.push([x, y]);
     }
 
     // Regularize scores
@@ -352,89 +357,105 @@ class RadarChart extends HTMLElement {
 
     // Draw measures of the chart
     const measureGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    for (let i = 0; i < points.length; i++) {
-      const x = points[i][0];
-      const y = points[i][1];
+    for (let i = 0; i < this.points.length; i++) {
+      const x = this.points[i][0];
+      const y = this.points[i][1];
       const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
       line.setAttribute('x1', center_x);
       line.setAttribute('y1', center_y);
       line.setAttribute('x2', x);
       line.setAttribute('y2', y);
-      line.setAttribute('stroke', 'white');
+      line.setAttribute('stroke', 'black');
       line.setAttribute('stroke-width', '.5');
       measureGroup.appendChild(line);
     }
-    svg.appendChild(measureGroup);
+    this.svg.appendChild(measureGroup);
 
     // Draw frame of the chart and set styles
-    const poly = this.polygon({ stroke: '#3498db', 'stroke-width': '2', 'fill': 'white' }, points);
-    svg.appendChild(poly);
+    const poly = this.polygon({ stroke: '#3498db', 'stroke-width': '2', 'fill': 'white' }, this.points);
+    this.svg.appendChild(poly);
 
     // Draw chart
-    const pathString = this.pathString(center_x, center_y, points, scores);
+    const pathString = this.pathString(center_x, center_y, this.points, scores);
     const chartPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     chartPath.setAttribute('d', pathString);
-    chartPath.setAttribute('fill', '#FAAA32');
-    // chartPath.setAttribute('fill-opacity', 'q');
+    chartPath.setAttribute('fill', '#999');
     chartPath.setAttribute('stroke-width', '.5');
     chartPath.setAttribute('stroke', 'white');
-    svg.appendChild(chartPath);
+    this.svg.appendChild(chartPath);
 
     // Draw labels
-    for (let i = 0; i < points.length; i++) {
-      const x = this.linedOn(center_x, points[i][0], 1);
-      const y = this.linedOn(center_y, points[i][1], 1);
+    for (let i = 0; i < this.points.length; i++) {
+      const x = this.linedOn(center_x, this.points[i][0], 1);
+      const y = this.linedOn(center_y, this.points[i][1], 1);
       const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+
       text.setAttribute('x', x);
       text.setAttribute('y', y);
       text.setAttribute('font-size', '10');
       text.setAttribute('fill', 'black');
       text.textContent = labels[i];
-      svg.appendChild(text);
+      this.svg.appendChild(text);
     }
 
     // Draw interactive circles if ids are provided
     if (ids) {
       const circleGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      for (let i = 0; i < points.length; i++) {
+      const textGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      for (let i = 0; i < this.points.length; i++) {
         for (let j = 1; j < 6; j++) {
-          const x = this.linedOn(center_x, points[i][0], j * 0.2);
-          const y = this.linedOn(center_y, points[i][1], j * 0.2);
+          const x = this.linedOn(center_x, this.points[i][0], j * 0.2);
+          const y = this.linedOn(center_y, this.points[i][1], j * 0.2);
           const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          const color = colors[i % colors.length];
+
           circle.setAttribute('cx', x);
           circle.setAttribute('cy', y);
-          circle.setAttribute('r', '1');
-          circle.setAttribute('fill', '#888');
+          circle.setAttribute('r', '1.5');
+          circle.setAttribute('fill', color);
           circle.setAttribute('stroke-width', '0');
           circle.dataset.axis = i;
           circle.dataset.score = j / 5.0;
           circle.dataset.relatedId = ids[i];
-          circle.addEventListener('mousedown', () => this.handleCircleMouseDown(circle, scores, chartPath, max));
-          circle.addEventListener('mouseover', () => this.handleCircleMouseOver(circle));
-          circle.addEventListener('mouseout', () => this.handleCircleMouseOut(circle));
+
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', x);
+          text.setAttribute('y', y);
+          text.setAttribute('font-size', '0');
+          text.setAttribute('fill', 'black');
+          text.setAttribute('opacity', '0');
+          text.textContent = circle.dataset.score;
+          circle.addEventListener('mouseover', () => this.handleCircleMouseOver(circle, text));
+          circle.addEventListener('mouseout', () => this.handleCircleMouseOut(circle, text));
           circleGroup.appendChild(circle);
+          textGroup.appendChild(text);
         }
       }
-      const style = document.createElement('style');
-      style.textContent = /*css*/`
-      :host {
-        display: block;
-      }
-      svg {
-        width: 100%;
-        height: 100%;
-        overflow: show;
-      }
 
-      svg text{
-        text-anchor: middle;
-        dominant-baseline: middle;
-      }
-    `;
-
-      shadow.appendChild(style);
-      svg.appendChild(circleGroup);
+      this.svg.appendChild(circleGroup);
+      this.svg.appendChild(textGroup);
     }
+
+    const style = document.createElement('style');
+    style.textContent = /*css*/`
+    :host {
+      display: block;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+      overflow: show;
+    }
+
+    svg text{
+      pointer-events: none;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+  `;
+
+    shadow.appendChild(style);
   }
 
   pathString(cx, cy, points, score) {
@@ -465,17 +486,16 @@ class RadarChart extends HTMLElement {
     return poly;
   }
 
-  handleCircleMouseDown(circle, scores, chartPath, max) {
-    scores[circle.dataset.axis] = circle.dataset.score;
-    chartPath.setAttribute('d', this.pathString(100, 100, this.points, scores.map(score => score * max)));
+  handleCircleMouseOver(circle, text) {
+    text.setAttribute('opacity', '1');
+    text.setAttribute('font-size', '10');
+    circle.setAttribute('r', '7.5');
   }
-
-  handleCircleMouseOver(circle) {
-    circle.setAttribute('r', '5');
-  }
-
-  handleCircleMouseOut(circle) {
-    circle.setAttribute('r', '1');
+  
+  handleCircleMouseOut(circle, text) {
+    text.setAttribute('opacity', '0');
+    text.setAttribute('font-size', '0');
+    circle.setAttribute('r', '1.5');
   }
 }
 
