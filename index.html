@@ -23,7 +23,7 @@
     </script>
 </head>
 
-<body class="h-screen w-screen flex items-center justify-center">
+<body class="h-screen w-screen flex items-center justify-center bg-gray-100">
     <style>
         *,
         *:after {
@@ -31,7 +31,7 @@
         }
 
         h1 {
-            font-size: clamp(3rem, 8vmin, 4rem);
+            font-size: clamp(2rem, 5vw, 4rem);
             font-weight: bold;
         }
 
@@ -56,7 +56,7 @@
             border-radius: 50%;
         }
     </style>
-    <div class="w-1/2 flex items-center justify-center">
+    <div class="w-1/2 flex items-center justify-center max-md:hidden">
         <h1>
             Here you can <br>
             <span class="underlined underline-overflow after:border-[7px] border-solid after:border-blue-400">Display</span>, <span class="underlined underline-overflow after:border-[7px] border-solid after:border-yellow-400">Analyze</span><br>
@@ -64,7 +64,7 @@
             your Z01 cursus
         </h1>
     </div>
-    <div class="h-[60vh] w-1/2 mb-6 sm:mb-0">
+    <div class="h-[60vh] w-1/2 mb-6 sm:mb-0 max-md:w-[90%] max-md:h-[90%]">
         <div class="relative h-full ml-0 mr-0 sm:mr-6">
             <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-black rounded-lg"></span>
             <div class="relative h-full p-5 bg-white border-2 border-black rounded-lg">
