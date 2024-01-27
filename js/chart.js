@@ -394,7 +394,7 @@ class RadarChart extends HTMLElement {
 
       text.setAttribute('x', x);
       text.setAttribute('y', y);
-      text.setAttribute('font-size', '10');
+      text.setAttribute('font-size', '8');
       text.setAttribute('fill', 'black');
       text.textContent = labels[i];
       this.svg.appendChild(text);
@@ -489,7 +489,7 @@ class RadarChart extends HTMLElement {
 
   handleCircleMouseOver(circle, text) {
     text.setAttribute('opacity', '1');
-    text.setAttribute('font-size', '10');
+    text.setAttribute('font-size', '8');
     circle.setAttribute('r', '7.5');
   }
   

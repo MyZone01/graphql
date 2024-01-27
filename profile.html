@@ -8,6 +8,22 @@
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>😐</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { fetchUserData, } from "./js/app.js";
+
+        function checkAuth() {
+            const authToken = localStorage.getItem("authToken");
+
+            if (!authToken) {
+                // If no authToken is found, redirect to the login page
+                window.location.href = "index.html";
+            } else {
+                // Fetch user data when the profile page loads
+                fetchUserData();
+            }
+        }
+        checkAuth();
+    </script>
     <style>
         ::-webkit-scrollbar {
             width: 5px;
@@ -133,22 +149,9 @@
     </main>
     <script src="js/chart.js"></script>
     <script type="module">
-        import { fetchUserData, logout } from "./js/app.js";
+        import { logout } from "./js/app.js";
 
         document.getElementById("logoutButton").addEventListener("click", () => logout())
-
-        function checkAuth() {
-            const authToken = localStorage.getItem("authToken");
-
-            if (!authToken) {
-                // If no authToken is found, redirect to the login page
-                window.location.href = "index.html";
-            } else {
-                // Fetch user data when the profile page loads
-                fetchUserData();
-            }
-        }
-        checkAuth();
     </script>
 </body>
 </html>
