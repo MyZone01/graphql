@@ -108,7 +108,9 @@ class PieChart extends HTMLElement {
               left: 0;
               padding: .1em .2em;
               transform: translate(-50%, -50%);
-              background-color: var(--tooltip-bg, #FFF);
+              background-color: var(--tooltip-bg, #000);
+              color: #FFF;
+              border-radius: .25rem;
               opacity: 0;
               transition: opacity .3s;
           }
