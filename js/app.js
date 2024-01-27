@@ -1,4 +1,4 @@
-import { getGroups, countInteractions, getXPS } from "./utils.js";
+import { getGroups, countInteractions, getCountryCode, getXPS } from "./utils.js";
 
 const graphqlEndpoint = "https://learn.zone01dakar.sn/api/graphql-engine/v1/graphql";
 
@@ -100,10 +100,13 @@ export async function fetchUserData() {
               amount
               path
             }
-            skills: transaction(order_by: {createdAt: asc}, where: {eventId: {_eq: 56}}) {
+            skills: transaction(
+              order_by: {type: asc, createdAt: desc,amount:desc}
+              distinct_on: [type]
+              where: {eventId: {_eq: 56}, _and: {type: {_like: "skill_%"}}}
+            ) {
               type
               amount
-              path
             }
             xpTotal: transaction_aggregate(where: {type: {_eq: "xp"}, eventId: {_eq: 56}}) {
               aggregate {
@@ -125,6 +128,7 @@ export async function fetchUserData() {
     id: result.user[0].id,
     login: result.user[0].login,
     email: result.user[0].attrs.email,
+    nationality: result.user[0].attrs.nationality1,
     campus: result.user[0].campus,
     ratio: result.user[0].auditRatio,
     firstName: result.user[0].firstName,
@@ -136,10 +140,8 @@ export async function fetchUserData() {
   const interactions = countInteractions(groups, user);
   const xps = getXPS(result.xp, user.xp)
   const audit = result.audits;
-  const test = result.skills;
-  const preElement = document.getElementById('json-data');
-  preElement.style.fontSize = '18px';
-  preElement.innerHTML = JSON.stringify(test, undefined, 2);
+  const skills = result.skills.sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount)).slice(0, 6);
+
   if (result.errors) {
     logout();
     throw new Error(result.errors[0]);
@@ -147,13 +149,14 @@ export async function fetchUserData() {
   displayUserData(user);
   displayRadarData(interactions);
   displayXp(xps);
-  displayDownUpRatio(audit);
+  displaySkills(skills);
+  displayDownUpRatio(result.user[0].totalUp, result.user[0].totalDown);
 }
 
-function displayDownUpRatio(downUpTransactions) {
+function displayDownUpRatio(up, down) {
   // Count the number of "down" and "up" transactions
-  const downCount = downUpTransactions.filter((transaction) => transaction.type === "down").length;
-  const upCount = downUpTransactions.filter((transaction) => transaction.type === "up").length;
+  const downCount = down;
+  const upCount = up;
 
   // Calculate the ratio
   const total = downCount + upCount;
@@ -161,11 +164,18 @@ function displayDownUpRatio(downUpTransactions) {
   const upRatio = (upCount / total) * 100;
 
   // Display the pie chart
-  const dataString = `${downRatio.toFixed(2)};${upRatio.toFixed(2)}`;
-  const labelsString = "Down;Up";
+  const dataString = `${downRatio};${upRatio}`;
+  const labelsString = `Down - ${downRatio.toFixed(2)};Up - ${upRatio.toFixed(2)}`;
   const colors = getRandomColors(2).join(';');
 
   document.getElementById("pie").innerHTML = `<pie-chart id="demo" data="${dataString}" gap="0.06" colors="${colors}" donut="0.2" labels="${labelsString}"></pie-chart>`;
+}
+
+function displaySkills(data) {
+  const skillDiv = document.getElementById("skills");
+  data.forEach((d) => {
+    skillDiv.innerHTML += `<div><b>${d.type.replace("skill_","").toUpperCase()}</b>: ${d.amount}</div>`
+  });
 }
 
 function displayXp(data) {
@@ -230,11 +240,11 @@ function formatByteSize(bytes) {
   const gigabyte = megabyte * 1000;
 
   if (bytes >= gigabyte) {
-    return (bytes / gigabyte).toFixed() + ' GB';
+    return (bytes / gigabyte).toFixed(2) + ' GB';
   } else if (bytes >= megabyte) {
-    return (bytes / megabyte).toFixed() + ' MB';
+    return (bytes / megabyte).toFixed(2) + ' MB';
   } else if (bytes >= kilobyte) {
-    return (bytes / kilobyte).toFixed() + ' KB';
+    return (bytes / kilobyte).toFixed(2) + ' KB';
   } else {
     return bytes + ' Bytes';
   }
@@ -242,10 +252,12 @@ function formatByteSize(bytes) {
 
 // Function to display user data on the profile page
 function displayUserData(user) {
+  const countryCode = getCountryCode(user.nationality)
   document.getElementById("welcome").innerText += ` ${user.firstName} ${user.lastName} 😁`;
   document.getElementById("email").innerText = `📧 ${user.email}`;
   document.getElementById("login").innerText = `👤 ${user.login}`;
   document.getElementById("campus").innerText = `${user.campus}`;
   document.getElementById("ratio").innerText = `🖊️ ${user.ratio.toFixed(1)}`;
   document.getElementById("xp").innerText = `⭐ ${formatByteSize(user.xp)}`;
+  document.getElementById("flag").setAttribute("src", `https://flagsapi.com/${countryCode}/flat/32.png`)
 }

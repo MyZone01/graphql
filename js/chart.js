@@ -82,6 +82,7 @@ class PieChart extends HTMLElement {
       const div = document.createElement('div')
       div.innerText = label
       shadow.appendChild(div)
+      div.style.whiteSpace = 'nowrap';
       return div
     })
     const style = document.createElement('style');

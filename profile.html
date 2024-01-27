@@ -39,7 +39,7 @@
     </style>
 </head>
 
-<body class="w-screen h-[100vh] overflow-x-hidden">
+<body class="w-screen h-[100vh] overflow-hidden">
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -72,7 +72,7 @@
                 </div>
                 <div
                     class="flex items-center px-4 py-2 text-sm font-medium text-gray-950 transition-colors duration-200 sm:text-base sm:px-6 gap-x-3 hover:bg-gray-200 bg-yellow-300">
-                    <img src="https://flagsapi.com/SN/flat/32.png">
+                    <img id="flag" src="">
                     <span id="campus" class="font-bold"></span>
                 </div>
                 <div
@@ -95,12 +95,7 @@
                     <div class="h-full mb-6 sm:mb-0 w-full">
                         <div class="relative h-full ml-0 mr-0 sm:mr-6">
                             <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-blue-400 rounded-lg"></span>
-                            <div class="relative h-full p-5 bg-white border-2 border-blue-400 rounded-lg">
-                                <div>Skill: real-time-forum, Amount: 103500</div>
-                                <div>Skill: mister-quiz, Amount: 75250</div>
-                                <div>Skill: make-your-game, Amount: 147000</div>
-                                <div>Skill: make-your-game, Amount: 147000</div>
-                                <div>Skill: make-your-game, Amount: 147000</div>
+                            <div id="skills" class="relative h-full p-5 bg-white border-2 border-blue-400 rounded-lg">
                             </div>
                         </div>
                     </div>
@@ -136,7 +131,6 @@
             </div>
         </div>
     </main>
-    <pre id="json-data"></pre>
     <script src="js/chart.js"></script>
     <script type="module">
         import { fetchUserData, logout } from "./js/app.js";
@@ -157,40 +151,4 @@
         checkAuth();
     </script>
 </body>
-
-<!-- <body class="flex w-full flex-col items-center bg-white dark:bg-gray-800 p-5 h-full overflow-hidden">
-    <div class="flex w-3/4 items-center justify-between mb-4">
-        <h1 class="text-5xl text-white">User Profile</h1>
-        <button
-            class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-red-600 rounded-lg hover:bg-red-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
-            onclick="logout()">Logout
-        </button>
-    </div>
-    <div class="flex w-full justify-between h-[35vh]">
-        <div id="basic-info" class="mr-5 max-w-2xl p-4 bg-white rounded-lg shadow-md text-white dark:bg-gray-950">
-            <h2 class="text-3xl mb-3 font-bold">Basics</h3>
-            <p><strong>ID:</strong> <span id="userId"></span></p>
-            <p><strong>Login:</strong> <span id="userLogin"></span></p>
-        </div>
-        <div id="skills-info"
-            class="mr-5 max-w-2xl p-4 bg-white rounded-lg shadow-md text-white dark:bg-gray-950 overflow-y-scroll">
-            <h2 class="text-3xl mb-3 font-bold">Skills</h3>
-        </div>
-        <div id="xp-info" class="mr-5 max-w-2xl p-4 bg-white rounded-lg shadow-md text-white dark:bg-gray-950">
-            <h2 class="text-3xl mb-3 font-bold">XP Amount</h3>
-            <p><strong>Total XP:</strong> <span id="totalXP"></span></p>
-        </div>
-        <div id="grades-audits-info"
-            class="mr-5 max-w-2xl p-4 bg-white rounded-lg text-white shadow-md dark:bg-gray-950 overflow-y-scroll">
-            <h2 class="text-3xl mb-3 font-bold">Grades and Audits</h3>
-        </div>
-    </div>
-    <div class="flex w-full h-[40vh]">
-        <pie-chart id="demo" data="40;30;30;20;10;10" gap="0.06" donut="0.2"
-            labels="Jaune;Vert;Orange;Bleu;Rouge;Bleu clair"></pie-chart>
-        <bar-chart data="30;50;80;20;60;100" colors="#3498db;#e74c3c;#2ecc71;#f39c12;#9b59b6"
-            labels="Label A;Label B;Label C;Label D;Label E;Label F"></bar-chart>
-    </div>
-</body> -->
-
 </html>
