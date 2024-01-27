@@ -1,11 +1,12 @@
 # 📊 GRAPHQL
 
-The XP Transaction Analyzer is a JavaScript utility that analyzes XP transactions and displays the data using interactive charts.
+The graphql is a JavaScript project that analyzes XP transactions and displays the data using interactive charts.
 
 ## Features
 
-- Calculate the ratio of "down" and "up" transactions.
+- Interaction with user (Groups + Audit).
 - Display the ratio using a pie chart.
+- Display the top 10 big projects.
 - Simple and intuitive interface.
 
 ## Installation
@@ -13,40 +14,13 @@ The XP Transaction Analyzer is a JavaScript utility that analyzes XP transaction
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/xp-transaction-analyzer.git
+git clone https://github.com/MyZone01/graphql.git
 ```
 
 2. Navigate to the project directory:
 
 ```bash
-cd xp-transaction-analyzer
+cd graphql
 ```
 
 3. Open the `index.html` file in your web browser.
-
-## Usage
-
-1. Provide XP transactions data in the format specified.
-2. Call the `displayDownUpRatio` function with the XP transactions data as an argument.
-3. The pie chart will be displayed with the ratio of "down" and "up" transactions.
-
-```javascript
-// Example usage
-const downUpTransactions = [
-  {
-    "type": "down",
-    "amount": 5000,
-    "path": "/dakar/div-01/go-reloaded",
-    "createdAt": "2023-03-08T15:25:02.818932+00:00"
-  },
-  // Add more transactions here
-  {
-    "type": "up",
-    "amount": 5000,
-    "path": "/dakar/div-01/go-reloaded",
-    "createdAt": "2023-03-09T13:49:28.065884+00:00"
-  }
-];
-
-displayDownUpRatio(downUpTransactions);
-```
