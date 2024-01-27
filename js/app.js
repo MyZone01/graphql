@@ -120,7 +120,7 @@ export async function fetchUserData() {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch user data");
+    window.location.href = "index.html"
   }
 
   const result = (await response.json()).data;
