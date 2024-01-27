@@ -140,7 +140,7 @@ export async function fetchUserData() {
   const interactions = countInteractions(groups, user);
   const xps = getXPS(result.xp, user.xp)
   const audit = result.audits;
-  const skills = result.skills.sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount)).slice(0, 6);
+  const skills = result.skills.sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount)).slice(0, 10);
 
   if (result.errors) {
     logout();
