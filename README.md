@@ -4,6 +4,10 @@ The graphql is a JavaScript project that analyzes XP transactions and displays t
 
 ## Features
 
+|Login Page|Profile Page|
+:-:|:-:
+![GraphQL Login Page](img/login.jpeg)|![GraphQL Profile Page](img/profile.jpeg)
+
 - Interaction with user (Groups + Audit).
 - Display the ratio using a pie chart.
 - Display the top 10 big projects.
