@@ -1,8 +1,4 @@
-Sure, here's a sample README file for the project:
-
----
-
-# XP Transaction Analyzer
+# 📊 GRAPHQL
 
 The XP Transaction Analyzer is a JavaScript utility that analyzes XP transactions and displays the data using interactive charts.
 
