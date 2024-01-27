@@ -24,3 +24,6 @@ cd graphql
 ```
 
 3. Open the `index.html` file in your web browser.
+
+## Demo
+Here is the demo [url](https://graphql-beryl.vercel.app/).
