@@ -1,7 +1,9 @@
+import { getGroups, countInteractions, getXPS } from "./utils.js";
+
 const graphqlEndpoint = "https://learn.zone01dakar.sn/api/graphql-engine/v1/graphql";
 
 // Function to handle login
-async function login(evt) {
+export async function login(evt) {
   evt.preventDefault()
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
@@ -32,7 +34,7 @@ async function login(evt) {
 }
 
 // Function to handle logout
-function logout() {
+export function logout() {
   // Remove the authToken from local storage
   localStorage.removeItem("authToken");
 
@@ -41,7 +43,7 @@ function logout() {
 }
 
 // Function to fetch user data using GraphQL query
-async function fetchUserData() {
+export async function fetchUserData() {
   const authToken = localStorage.getItem("authToken");
   // try {
   const response = await fetch(graphqlEndpoint, {
@@ -118,62 +120,6 @@ async function fetchUserData() {
     throw new Error("Failed to fetch user data");
   }
 
-  // Function to reformat the data
-  function getGroups(data) {
-    return data.map(groupData => {
-      const group = groupData.group;
-      const projectName = group.object.name;
-      const members = group.members.map(member => member.user.login);
-      const auditors = group.auditors.map(auditor => ({
-        name: auditor.auditor.login,
-        grade: auditor.grade.toString(),
-      }));
-
-      return {
-        projectName,
-        members,
-        auditors,
-      };
-    });
-  }
-
-  function countInteractions(data, userLogin) {
-    const interactionCount = {};
-
-    // Helper function to update interaction count for a user
-    function updateCount(user) {
-      if (!interactionCount[user]) {
-        interactionCount[user] = 1;
-      } else {
-        interactionCount[user]++;
-      }
-    }
-
-    // Count interactions for group members
-    data.forEach(groupData => {
-      groupData.members.forEach(member => member != userLogin.login && updateCount(member));
-    });
-
-    // Count interactions for auditors
-    data.forEach(groupData => {
-      groupData.auditors.forEach(auditor => auditor.name != userLogin.login && updateCount(auditor.name));
-    });
-
-    // Sort users by interaction count in descending order
-    const sortedInteractions = Object.entries(interactionCount)
-      .sort(([, countA], [, countB]) => countB - countA)
-      .reduce((sortedObj, [key, value]) => ({ ...sortedObj, [key]: value }), {});
-
-    return sortedInteractions;
-  }
-
-  function getXPS(data, total) {
-    return data.filter(p => p.path.split("/")[3] != "checkpoint").map(project => ({
-      name: getResourceFromPath(project.path),
-      score: ((project.amount * 100) / total).toFixed(2),
-    }))
-  }
-
   const result = (await response.json()).data;
   const user = {
     id: result.user[0].id,
@@ -189,10 +135,11 @@ async function fetchUserData() {
   const groups = getGroups(result.user[0].groups);
   const interactions = countInteractions(groups, user);
   const xps = getXPS(result.xp, user.xp)
-  const test = result.audits;
+  const audit = result.audits;
+  const test = result.skills;
   const preElement = document.getElementById('json-data');
   preElement.style.fontSize = '18px';
-  preElement.innerHTML = JSON.stringify(test, undefined, 2)
+  preElement.innerHTML = JSON.stringify(test, undefined, 2);
   if (result.errors) {
     logout();
     throw new Error(result.errors[0]);
@@ -200,11 +147,24 @@ async function fetchUserData() {
   displayUserData(user);
   displayRadarData(interactions);
   displayXp(xps);
-  displayAudit(audit);
+  displayDownUpRatio(audit);
 }
 
-function displayAudit(audit) {
-  
+function displayDownUpRatio(downUpTransactions) {
+  // Count the number of "down" and "up" transactions
+  const downCount = downUpTransactions.filter((transaction) => transaction.type === "down").length;
+  const upCount = downUpTransactions.filter((transaction) => transaction.type === "up").length;
+
+  // Calculate the ratio
+  const total = downCount + upCount;
+  const downRatio = (downCount / total) * 100;
+  const upRatio = (upCount / total) * 100;
+
+  // Display the pie chart
+  const dataString = `${downRatio.toFixed(2)};${upRatio.toFixed(2)}`;
+  const labelsString = "Down;Up";
+
+  document.getElementById("pie").innerHTML = `<pie-chart id="demo" data="${dataString}" gap="0.06" donut="0.2" labels="${labelsString}"></pie-chart>`;
 }
 
 function displayXp(data) {
@@ -243,7 +203,6 @@ function getRandomColor() {
   return color;
 }
 
-
 function displayRadarData(interactions) {
   // Get the top 5 users based on interaction count
   const topUsers = Object.entries(interactions)
@@ -261,16 +220,6 @@ function displayRadarData(interactions) {
 
   // Display the radar chart in the "radar" element
   document.getElementById("radar").innerHTML = radarHTML;
-}
-
-function getResourceFromPath(path) {
-  // Split the path by '/'
-  const pathParts = path.split('/');
-
-  // Get the last part (resource)
-  const resource = pathParts[pathParts.length - 1];
-
-  return resource;
 }
 
 function formatByteSize(bytes) {
@@ -298,46 +247,3 @@ function displayUserData(user) {
   document.getElementById("ratio").innerText = `🖊️ ${user.ratio.toFixed(1)}`;
   document.getElementById("xp").innerText = `⭐ ${formatByteSize(user.xp)}`;
 }
-
-
-const createPie = (totalXP, subjData, pieChart, pieSubject, pieXP) => {
-  let strokeDOF = 0;
-
-  Object.entries(subjData).forEach(([key, value]) => {
-    console.log(value);
-    let slice = (value / totalXP) * 31.4;
-
-    let randomColor = Math.floor(Math.random() * 16777215).toString(16);
-
-    pieChart.innerHTML += `
-            <circle r="5" cx="10" cy="10" fill="transparent"
-            stroke=#${randomColor}
-            stroke-width="10"
-            stroke-dasharray="${slice} 31.4"
-            stroke-dashoffset="-${strokeDOF}"
-            data-name="${key}"
-            data-value="${value}"
-            />	
-        `;
-
-    strokeDOF += slice;
-  });
-
-  let children = document.querySelectorAll("#pie-chart > circle");
-
-  for (let first of children) {
-    first.addEventListener("mouseover", (e) => {
-      pieSubject.innerHTML = e.target.dataset.name;
-      pieXP.innerHTML =
-        ((e.target.dataset.value / totalXP) * 100).toFixed(2) + "%";
-    });
-  }
-
-  console.log("children", children);
-};
-
-// Function to calculate total XP from transactions
-function calculateTotalXP(xpInfo) {
-  return xpInfo.reduce((totalXP, transaction) => totalXP + transaction.amount, 0);
-}
-

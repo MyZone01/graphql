@@ -1,5 +1,5 @@
 /**
- * Renvoie un élément HTML depuis une chaine
+ * Returns an HTML element from a channel
  * @param {string} str 
  * @returns {HTMLElement}
  */
@@ -12,7 +12,7 @@ function easeOutExpo(x) {
 }
 
 /**
-* Représente un point
+* Represents a point
 * @property {number} x
 * @property {number} y
 */
@@ -42,14 +42,14 @@ class PieChart extends HTMLElement {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
 
-    // On prépare les paramètres
+    // We prepare the parameters
     const donut = this.getAttribute('donut') ?? '0.005'
     const gap = this.getAttribute('gap') ?? '0.015'
     const colors = this.getAttribute('colors')?.split(';') ?? ['#FAAA32', '#3EFA7D', '#FA6A25', '#0C94FA', '#FA1F19', '#0CFAE2', '#AB6D23'];
     this.data = this.getAttribute('data').split(';').map(v => parseFloat(v))
     const labels = this.getAttribute('labels')?.split(';') ?? []
 
-    // On génère la structure du DOM nécessaire pour la suite
+    // we generate the structure of the DOM necessary for the future
     const svg = strToDom(/*html*/`<svg viewBox="-1 -1 2 2">
           <g mask="url(#graphMask)"></g>
           <mask id="graphMask">
@@ -135,7 +135,7 @@ class PieChart extends HTMLElement {
   }
 
   /**
-   * Dessine le graphique
+   * Draw the graphic
    * @param {number} progress 
    */
   draw(progress = 1) {
@@ -158,7 +158,7 @@ class PieChart extends HTMLElement {
   }
 
   /**
-   * Gère l'effet lorsque l'on survol une section du graph
+   * Manages the effect when flying over a section of the graph
    * @param {number} k Index de l'élément survolé
    */
   handlePathHover(k) {
@@ -167,7 +167,7 @@ class PieChart extends HTMLElement {
   }
 
   /**
-   * Gère l'effet lorsque l'on quitte la section du graph
+   * Manages the effect when you leave the graph section
    * @param {number} k Index de l'élément survolé
    */
   handlePathOut(k) {
@@ -175,7 +175,7 @@ class PieChart extends HTMLElement {
   }
 
   /**
-   * Positionne le label en fonction de l'angle
+   * Position the label as a function of the angle
    * @param {HTMLDivElement|undefined} label 
    * @param {number} angle 
    */
@@ -323,15 +323,15 @@ class RadarChart extends HTMLElement {
     const max = parseFloat(this.getAttribute('max')) || 1.0;
 
     // Constants
-    const width = this.getAttribute('width') ?? 100; // Adjust as needed
-    const height = this.getAttribute('height') ?? 100; // Adjust as needed
-    const center_x = width / 2 ?? 75; // Adjust as needed
-    const center_y = height / 2 ?? 50; // Adjust as needed
+    const width = this.getAttribute('width') ?? 200; // Adjust as needed
+    const height = this.getAttribute('height') ?? 200; // Adjust as needed
+    const center_x = width / 2 ?? 100; // Adjust as needed
+    const center_y = height / 2 ?? 100; // Adjust as needed
     const radius = 80; // Adjust as needed
     const sides = scores.length;
 
     // Create SVG
-    const svg = strToDom(/*html*/`<svg viewBox="0 0 100 100"></svg>`);
+    const svg = strToDom(/*html*/`<svg viewBox="0 0 200 200"></svg>`);
     shadow.appendChild(svg);
 
     // Generate points of the chart frame
@@ -423,6 +423,7 @@ class RadarChart extends HTMLElement {
       svg {
         width: 100%;
         height: 100%;
+        overflow: show;
       }
 
       svg text{

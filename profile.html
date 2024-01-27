@@ -26,7 +26,11 @@
             background: white;
         }
 
-        radar-chart,
+        radar-chart {
+            width: 100%;
+            aspect-ratio: 1/1;
+        }
+
         bar-chart,
         pie-chart {
             height: 100%;
@@ -35,7 +39,7 @@
     </style>
 </head>
 
-<body class="p-5 w-full h-[100vh]">
+<body class="w-screen h-[100vh] overflow-x-hidden">
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -53,44 +57,42 @@
             /* font-size: 5cqw; */
         }
     </style>
-    <header class="mb-4 w-full">
-        <h1 id="welcome">Welcome back,</h1>
-    </header>
-    <main class="flex flex-col w-full h-90">
-        <div class="w-full flex mb-4">
+    <header class="mb-4 w-screen px-5 pt-5">
+        <h1 id="welcome" >Welcome back,</h1>
+        <div class="flex justify-between">
             <div
-                class="flex overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse border-black divide-black">
+                class="flex overflow-hidden bg-white border-2 divide-x-2 rounded-lg rtl:flex-row-reverse border-black divide-black">
                 <div
                     class="flex items-center px-4 py-2 text-sm font-medium text-gray-950 transition-colors duration-200 sm:text-base sm:px-6 gap-x-3 hover:bg-gray-200 bg-green-300 cursor-pointer">
-                    <span id="email" class="font-bold">gmail.combarsaliou1998@</span>
+                    <span id="email" class="font-bold"></span>
                 </div>
-
-                <button
+                <div
                     class="flex items-center px-4 py-2 text-sm font-medium text-gray-950 transition-colors duration-200 sm:text-base sm:px-6 gap-x-3 hover:bg-gray-200 bg-yellow-300">
-                    <span id="login" class="font-bold">mbayeserign</span>
-                </button>
-                <button
+                    <span id="login" class="font-bold"></span>
+                </div>
+                <div
                     class="flex items-center px-4 py-2 text-sm font-medium text-gray-950 transition-colors duration-200 sm:text-base sm:px-6 gap-x-3 hover:bg-gray-200 bg-yellow-300">
                     <img src="https://flagsapi.com/SN/flat/32.png">
-
-                    <span id="campus" class="font-bold">karda</span>
-                </button>
-                <button
+                    <span id="campus" class="font-bold"></span>
+                </div>
+                <div
                     class="flex items-center px-4 py-2 text-sm font-medium text-gray-950 transition-colors duration-200 sm:text-base sm:px-6 gap-x-3 hover:bg-gray-200 bg-red-400">
-                    <span id="ratio" class="font-bold">0.5</span>
-                </button>
-
-                <button
+                    <span id="ratio" class="font-bold"></span>
+                </div>
+                <div
                     class="flex items-center px-4 py-2 text-sm font-medium text-gray-950 transition-colors duration-200 sm:text-base sm:px-6 gap-x-3 hover:bg-gray-200 bg-red-400">
-
-                    <span id="xp" class="font-bold">910kb</span>
-                </button>
+                    <span id="xp" class="font-bold"></span>
+                </div>
             </div>
+            <button id="logoutButton"
+                class="flex overflow-hidden bg-white border-2 rounded-lg rtl:flex-row-reverse border-purple-500 font-bold text-purple-700 items-center px-4 py-2">Logout</button>
         </div>
-        <div class="relative flex flex-col justify-between h-full xl:px-0">
-            <div class="w-full h-full">
-                <div class="flex flex-col h-40 w-full mb-5 sm:flex-row">
-                    <div class="h-full w-full mb-6 sm:mb-0 w-1/2">
+    </header>
+    <main class="flex flex-col w-screen h-full overflow-hidden">
+        <div class="relative flex flex-col justify-between w-full h-[75vh]">
+            <div class="w-screen h-full flex flex-wrap px-5 pb-5">
+                <div class="flex flex-col h-full w-3/5 mb-5">
+                    <div class="h-full mb-6 sm:mb-0 w-full">
                         <div class="relative h-full ml-0 mr-0 sm:mr-6">
                             <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-blue-400 rounded-lg"></span>
                             <div class="relative h-full p-5 bg-white border-2 border-blue-400 rounded-lg">
@@ -98,47 +100,36 @@
                                 <div>Skill: mister-quiz, Amount: 75250</div>
                                 <div>Skill: make-your-game, Amount: 147000</div>
                                 <div>Skill: make-your-game, Amount: 147000</div>
+                                <div>Skill: make-your-game, Amount: 147000</div>
                             </div>
                         </div>
                     </div>
-                    <div class="h-full w-full mb-6 sm:mb-0 w-1/2">
-                        <div class="relative h-full ml-0 mr-0 ">
-                            <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-yellow-400 rounded-lg"></span>
-                            <div class="relative h-full p-5 bg-white border-2 border-yellow-400 rounded-lg">
-                                <div>Skill: real-time-forum, Amount: 103500</div>
-                                <div>Skill: mister-quiz, Amount: 75250</div>
-                                <div>Skill: make-your-game, Amount: 147000</div>
-                                <div>Skill: make-your-game, Amount: 147000</div>
+                    <div class="flex w-full mt-6">
+                        <div class="h-full w-1/2">
+                            <div class="relative h-full ml-0 mr-0 sm:mr-6">
+                                <span
+                                    class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-green-600 rounded-lg"></span>
+                                <div id="pie"
+                                    class="relative h-[300px] flex items-center justify-center p-5 bg-white border-2 border-green-600 rounded-lg">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="h-full w-1/2">
+                            <div class="relative h-full ml-0 md:mr-6">
+                                <span
+                                    class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-purple-500 rounded-lg"></span>
+                                <div id="bar"
+                                    class="relative h-[300px] p-5 bg-white border-2 border-purple-500 rounded-lg flex items-center justify-center">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="flex w-full mb-6 flex-row sm:flex-wrap">
-                    <div class="h-full md:w-1/3 mb-6 w-1/2">
-                        <div class="relative h-full ml-0 mr-0 sm:mr-6">
-                            <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-indigo-500 rounded-lg"></span>
-                            <div
-                                class="relative h-[300px] flex items-center justify-center p-5 bg-white border-2 border-indigo-500 rounded-lg">
-                                <pie-chart id="demo" data="40;30;30;20;10;10" gap="0.06" donut="0.2"
-                                    labels="Jaune;Vert;Orange;Bleu;Rouge;Bleu clair"></pie-chart>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="h-full md:w-1/3 w-1/2">
-                        <div class="relative h-full ml-0 md:mr-6">
-                            <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-purple-500 rounded-lg"></span>
-                            <div id="bar"
-                                class="relative h-[300px] p-5 bg-white border-2 border-purple-500 rounded-lg flex items-center justify-center">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="h-full md:w-1/3 w-full">
-                        <div class="relative h-full ml-0 mr-0">
-                            <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                            <div id="radar"
-                                class="relative h-[300px] p-5 bg-white border-2 border-red-500 rounded-lg flex items-center justify-center">
-
-                            </div>
+                <div class="flex w-2/5 h-full items-center justify-center">
+                    <div class="relative w-full h-full">
+                        <span class="absolute top-0 left-0 flex w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
+                        <div id="radar"
+                            class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg flex items-center justify-center">
                         </div>
                     </div>
                 </div>
@@ -146,9 +137,12 @@
         </div>
     </main>
     <pre id="json-data"></pre>
-    <script src="chart.js"></script>
-    <script src="app.js"></script>
-    <script>
+    <script src="js/chart.js"></script>
+    <script type="module">
+        import { fetchUserData, logout } from "./js/app.js";
+
+        document.getElementById("logoutButton").addEventListener("click", () => logout())
+
         function checkAuth() {
             const authToken = localStorage.getItem("authToken");
 
